@@ -1,0 +1,20 @@
+{
+  "name": "playlist-hero",
+  "version": "1.0.0",
+  "description": "Never worry about deleted videos in your YouTube playlists again",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "node src/server.js",
+    "test": "test"
+  },
+  "author": "Christoph Bolz <christoph.bolz@gmx.de>",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "googleapis": "^34.0.0",
+    "lodash": "^4.17.11",
+    "opn": "^5.4.0",
+    "server-destroy": "^1.0.1"
+  }
+}
