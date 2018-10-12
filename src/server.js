@@ -13,43 +13,82 @@ const youtube = google.youtube({
     auth: client.oAuth2Client
 });
 
-const getPlaylistData = async etag => {
+const scope = ['https://www.googleapis.com/auth/youtube'];
+
+const getPlaylistDataById = async (etag, id) => {
     const headers = {};
     if (etag) {
         headers['If-None-Match'] = etag;
     }
 
     const res = await youtube.playlists.list({
-        part: 'id, snippet',
-        id: 'PL1RQwuELCxoycdSERU3sdsEJYNINaiZTO', /*TODO: HERE*/
+        part: 'snippet, contentDetails',
+        id: id,
         headers: headers
     });
+    return res.data.items[0];
+};
 
-    console.log('Status code ' + res.status);
-    console.log(res.data);
-    return res;
+const getPlaylistVideosById = async (etag, id) => {
+    const headers = {};
+    if (etag) {
+        headers['If-None-Match'] = etag;
+    }
+
+    const res = await youtube.playlistItems.list({
+        part: 'snippet',
+        playlistId: id,
+        headers: headers,
+        maxResults: 50
+    });
+    return res.data;
+};
+
+const getSubscriptions = async  etag => {
+    const headers = {};
+    if (etag) {
+        headers['If-None-Match'] = etag;
+    }
+
+    const res = await youtube.activities.list({
+        home: true,
+        part: 'snippet, contentDetails'
+    });
+    return res.data;
 };
 
 app.get('/sample', (req, res) => {
-
-    const scopes = ['https://www.googleapis.com/auth/youtube'];
-
     client
-        .authenticate(scopes)
+        .authenticate(scope)
         .then(async () => {
-            const result = await getPlaylistData(null);
-            const etag = result.data.etag;
-            console.log("etag: " + etag);
-
-            const res2 = await getPlaylistData(etag);
-            console.log("res2 status: " + res2.status)
-            res.send(JSON.stringify(result));
+            //const result = await getPlaylistDataById(null, 'PL1RQwuELCxoycdSERU3sdsEJYNINaiZTO');
+            const result = await getPlaylistVideosById(null, 'PL1RQwuELCxoycdSERU3sdsEJYNINaiZTO');
+            res.json(result);
         })
         .catch(console.error);
+});
 
+app.get('/pl', (req, res) => {
+    const id = req.query.id;
+    const info = req.query.info;
+    client
+        .authenticate(scope)
+        .then(async () => {
+            const result = info ? await getPlaylistDataById(null, id) : await getPlaylistVideosById(null, id);
+            res.json(result);
+        })
+        .catch(console.error)
+});
+
+app.get('/subs', (req, res) => {
+    client
+        .authenticate(scope)
+        .then(async() => {
+            const result = await getSubscriptions(null);
+            res.json(result);
+        })
 });
 
 app.listen(8044, () => {
     console.log('Playlist-Hero listening on 8044!');
 });
-
