@@ -13,11 +13,19 @@
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
     "googleapis": "^34.0.0",
+    "helmet": "^3.14.0",
     "lodash": "^4.17.11",
     "opn": "^5.4.0",
-    "server-destroy": "^1.0.1"
+    "server-destroy": "^1.0.1",
+    "winston": "^3.1.0"
   },
   "devDependencies": {
-    "chai": "^4.2.0"
-  }
+    "chai": "^4.2.0",
+    "chai-http": "^4.2.0",
+    "mocha": "^5.2.0"
+  },
+  "keywords": [
+    "youtube",
+    "playlist"
+  ]
 }

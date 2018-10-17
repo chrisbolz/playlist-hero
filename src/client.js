@@ -53,17 +53,18 @@ class Client {
                 access_type: 'offline',
                 scope: scopes.join(' '),
             });
+            //TODO: use express?? use res.setHeader.
             const server = http
                 .createServer(async (req, res) => {
                     try {
                         if (req.url.indexOf('/oauth2callback') > -1) {
                             const qs = querystring.parse(url.parse(req.url).query);
-                            /*res.end(
-                                'Authentication successful! Please return to the console.'
-                            );*/
                             server.destroy();
                             const {tokens} = await this.oAuth2Client.getToken(qs.code);
                             this.oAuth2Client.credentials = tokens;
+                            res.end(
+                                'Authentication successful! Please return to the console.', 'UTF-8', destroyer(server)
+                            );
                             resolve(this.oAuth2Client);
                         }
                     } catch (e) {
