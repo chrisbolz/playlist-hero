@@ -32,7 +32,7 @@ class Logger {
 
     //TODO: test this, evaluate other possibilities
     error(err) {
-        this.logger.error(err);
+        this.logger.error(typeof err === 'string' ? err : err.stackTrace);
     }
 
     debug(msg) {

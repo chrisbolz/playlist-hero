@@ -1,0 +1,18 @@
+{
+  "development": {
+    "port": 8044,
+    "authPort": 8045,
+    "database": "",
+    "environment": "development",
+    "scopes": {
+      "youtube": "https://www.googleapis.com/auth/youtube"
+    }
+  },
+  "test": {
+    "port": 3099,
+    "environment": "test"
+  },
+  "production": {
+    "environment": "production"
+  }
+}

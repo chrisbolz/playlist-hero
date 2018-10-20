@@ -1,42 +1,47 @@
 "use strict";
 
 const {google} = require("googleapis");
-const client = require("../client");
+
+const Client = require("../client");
 
 const youtube = google.youtube({
     version: 'v3',
-    auth: client.oAuth2Client
+    auth: Client.oAuth2Client
 });
 
-async function getPlaylistData(etag) {
-    const headers = {};
-    if (etag) {
-        headers['If-None-Match'] = etag;
+class Playlist {
+    constructor() {
     }
 
-    const res = await youtube.playlists.list({
-        part: 'id, snippet',
-        id: 'PL1RQwuELCxoycdSERU3sdsEJYNINaiZTO', /*TODO: HERE*/
-        headers: headers
-    });
+    static async getData(id, etag) {
+        const headers = {};
+        if (etag) {
+            headers['If-None-Match'] = etag;
+        }
 
-    console.log('Status code ' + res.status);
-    console.log(res.data);
-    return res;
+        const res = await youtube.playlists.list({
+            part: 'snippet, contentDetails',
+            id: id,
+            headers: headers
+        });
+        //TODO: is this right?
+        return res.data.items[0];
+    }
+
+    static async getVideos(id, etag) {
+        const headers = {};
+        if (etag) {
+            headers['If-None-Match'] = etag;
+        }
+
+        const res = await youtube.playlistItems.list({
+            part: 'snippet',
+            playlistId: id,
+            headers: headers,
+            maxResults: 50
+        });
+        return res.data;
+    }
 }
 
-async function sample() {
-    const res = await getPlaylistData(null);
-    const etag = res.data.etag;
-    console.log("etag: " + etag);
-
-    const res2 = await getPlaylistData(etag);
-    console.log("res2 status: " + res2.status)
-}
-
-const scopes = ['https://www.googleapis.com/auth/youtube'];
-
-client
-    .authenticate(scopes)
-    .then(sample)
-    .catch(console.error);
+module.exports = new Playlist();
