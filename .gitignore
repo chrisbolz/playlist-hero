@@ -4,5 +4,5 @@ package-lock.json
 /node_modules
 npm-debug.log
 
-/logs/*
+/logs
 oauth2.keys.json

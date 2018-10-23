@@ -7,8 +7,9 @@ const Client = require('./client');
 const Playlist = require('./youtube/playlist');
 const Subs = require('./youtube/subs');
 const Logger = require('./util/logger');
+const config = require('./util/config');
 
-const youtubeScope = ["https://www.googleapis.com/auth/youtube"];//[global.config.scopes.youtube];
+const youtubeScope = [global.config.scopes.youtube];
 
 router.use((req, res, next) => {
     Logger.debug(`${req.method} for ${req.url}`);
@@ -19,7 +20,7 @@ router.get('/sampleVids', (req, res) => {
     Client
         .authenticate(youtubeScope)
         .then(async () => {
-            Logger.debug('authenticated - in then');
+            Logger.debug('authenticated');
             const result = await Playlist.getVideos('PL1RQwuELCxoycdSERU3sdsEJYNINaiZTO');
             res.json(result);
         })
@@ -30,7 +31,6 @@ router.get('/sampleData', (req, res) => {
     Client
         .authenticate(youtubeScope)
         .then(async () => {
-            Logger.debug('authenticated');
             const result = await Playlist.getData('PL1RQwuELCxoycdSERU3sdsEJYNINaiZTO');
             res.json(result);
         })
@@ -43,7 +43,6 @@ router.get('/pl', (req, res) => {
     Client
         .authenticate(youtubeScope)
         .then(async () => {
-            Logger.debug('authenticated');
             const result = await info ? Playlist.getData(playlistId) : Playlist.getVideos(playlistId);
             res.json(result);
         })

@@ -1,8 +1,8 @@
-"use strict";
+'use strict';
 
-const {google} = require("googleapis");
+const {google} = require('googleapis');
 
-const Client = require("../client");
+const Client = require('../client');
 
 const youtube = google.youtube({
     version: 'v3',

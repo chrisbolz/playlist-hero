@@ -67,13 +67,9 @@ class Client {
                                 'Authentication successful! Please return to the console.'
                             );
                             server.destroy();
-                            Logger.info('DAVOR')
                             const {tokens} = await this.oAuth2Client.getToken(qs.code, (err, tokens) => {
                                 if(err) {
-                                    Logger.info('HALLLOO');
                                     Logger.error(err);
-                                } else {
-                                    Logger.info('HIIII')
                                 }
                             });
                             this.oAuth2Client.credentials = tokens;

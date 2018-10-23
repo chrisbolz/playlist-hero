@@ -1,6 +1,6 @@
-const bodyParser = require("body-parser");
+const bodyParser = require('body-parser');
 const express = require('express');
-const helmet = require("helmet");
+const helmet = require('helmet');
 
 const Logger = require('./util/logger');
 const router = require('./router');
